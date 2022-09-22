@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="day_time_picker_format_year">%d</string>
+    <string name="day_time_picker_format_month">%d</string>
     <string name="day_time_picker_format_day">%d</string>
 </resources>
