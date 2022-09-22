@@ -208,18 +208,6 @@ class CityPickerView @JvmOverloads constructor(
         if (data.first == NO_POSITION && data.second == NO_POSITION && data.third == NO_POSITION) {
             return false
         }
-        val format = "%04d%02d%02d"
-        val selectedDateString = format.format(data.first, data.second, data.third)
-        minData()?.let {
-            if (selectedDateString < format.format(it.first, it.second, it.third)) {
-                return false
-            }
-        }
-        maxData()?.let {
-            if (selectedDateString > format.format(it.first, it.second, it.third)) {
-                return false
-            }
-        }
         return true
     }
 
