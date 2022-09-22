@@ -10,16 +10,16 @@ def libraryVersionCode = 10
 def libraryVersion = '0.4.0'
 
 android {
-    compileSdk 30
-    buildToolsVersion "30.0.3"
+    compileSdk 31
+    buildToolsVersion "33.0.0"
 
     viewBinding {
         enabled = true
     }
 
     defaultConfig {
-        minSdk 17
-        targetSdk 30
+        minSdk 21
+        targetSdk 31
         versionCode libraryVersionCode
         versionName libraryVersion
 
@@ -34,17 +34,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
+//    kotlinOptions {
+//        jvmTarget = '1.8'
+//    }
 }
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
