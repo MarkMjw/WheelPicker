@@ -5,17 +5,13 @@ import android.graphics.Camera
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.util.AttributeSet
-import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.cos
-import kotlin.math.sin
+import kotlin.math.*
 
 class WheelPickerRecyclerView @JvmOverloads constructor(
     context: Context,
@@ -59,7 +55,7 @@ class WheelPickerRecyclerView @JvmOverloads constructor(
 
     override fun setAdapter(adapter: Adapter<*>?) {
         super.setAdapter(adapter)
-        adapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+        adapter?.registerAdapterDataObserver(object : AdapterDataObserver() {
             override fun onChanged() {
                 refreshCurrentPosition()
             }
@@ -67,8 +63,6 @@ class WheelPickerRecyclerView @JvmOverloads constructor(
     }
 
     init {
-        val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        linearLayoutManager.stackFromEnd = true
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         snapHelper.attachToRecyclerView(this)
         overScrollMode = OVER_SCROLL_NEVER
@@ -91,7 +85,7 @@ class WheelPickerRecyclerView @JvmOverloads constructor(
     }
 
     private fun smoothScrollToCenterPosition(position: Int, completion: (() -> Unit)? = null) {
-        val listener: OnScrollListener = object: OnScrollListener() {
+        val listener: OnScrollListener = object : OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState != SCROLL_STATE_IDLE) {
                     return
@@ -139,7 +133,7 @@ class WheelPickerRecyclerView @JvmOverloads constructor(
 
     private fun scrollToCenterPosition(position: Int, completion: (() -> Unit)? = null) {
         viewTreeObserver.removeOnGlobalLayoutListener(scrollToCenterPositionListener)
-        scrollToCenterPositionListener = object: ViewTreeObserver.OnGlobalLayoutListener {
+        scrollToCenterPositionListener = object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 viewTreeObserver.removeOnGlobalLayoutListener(this)
                 do {
@@ -258,5 +252,9 @@ class WheelPickerRecyclerView @JvmOverloads constructor(
         val result = super.drawChild(canvas, child, drawingTime)
         canvas.restore()
         return result
+    }
+
+    override fun fling(velocityX: Int, velocityY: Int): Boolean {
+        return super.fling(velocityX, (velocityY * 0.25).roundToInt())
     }
 }

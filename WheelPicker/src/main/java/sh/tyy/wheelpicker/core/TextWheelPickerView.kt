@@ -47,13 +47,12 @@ class TextWheelPickerView @JvmOverloads constructor(
         }
 
     init {
-        addView(highlightView)
-        (highlightView.layoutParams as? LayoutParams)?.apply {
-            width = ViewGroup.LayoutParams.MATCH_PARENT
-            height =
-                context.resources.getDimensionPixelSize(R.dimen.text_wheel_picker_item_height)
-            gravity = Gravity.CENTER_VERTICAL
-        }
+        addView(highlightView,
+            0,
+            LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, context.resources.getDimensionPixelSize(R.dimen.text_wheel_picker_item_height)).apply {
+                gravity = Gravity.CENTER_VERTICAL
+            }
+        )
 
         attrs?.let {
             context.theme.obtainStyledAttributes(

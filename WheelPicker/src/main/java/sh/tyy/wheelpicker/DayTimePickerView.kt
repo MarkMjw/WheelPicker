@@ -92,13 +92,12 @@ class DayTimePickerView @JvmOverloads constructor(
         minutePickerView.setAdapter(minuteAdapter)
         minuteAdapter.values =
             (0 until 60).map { TextWheelPickerView.Item("$it", "$it") }
-        addView(highlightView)
-        (highlightView.layoutParams as? LayoutParams)?.apply {
-            width = ViewGroup.LayoutParams.MATCH_PARENT
-            height =
-                context.resources.getDimensionPixelSize(R.dimen.text_wheel_picker_item_height)
-            gravity = Gravity.CENTER_VERTICAL
-        }
+        addView(highlightView,
+            0,
+            LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, context.resources.getDimensionPixelSize(R.dimen.text_wheel_picker_item_height)).apply {
+                gravity = Gravity.CENTER_VERTICAL
+            }
+        )
 
         dayPickerView.setWheelListener(this)
         hourPickerView.setWheelListener(this)

@@ -8,7 +8,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.ConfigurationCompat
-import sh.tyy.wheelpicker.DayTimePicker
 import sh.tyy.wheelpicker.WeekdayTimePicker
 import sh.tyy.wheelpicker.WeekdayTimePickerView
 import java.text.SimpleDateFormat
@@ -77,7 +76,7 @@ class WeekdayTimePickerExampleActivity : AppCompatActivity(), PickerExample {
 
     private fun setupWeekdayTimePicker() {
         calendar.time = Date()
-        if (ConfigurationCompat.getLocales(resources.configuration).get(0).country.equals("CN")) {
+        if (ConfigurationCompat.getLocales(resources.configuration).get(0)?.country.equals("CN")) {
             weekdayTimePickerView.firstDayOfWeek = Calendar.MONDAY
         }
 
