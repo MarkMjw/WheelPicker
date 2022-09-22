@@ -36,6 +36,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="YEAR_MONTH" />
+
+        <RadioButton
+            android:id="@+id/year_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="YEAR" />
+
     </RadioGroup>
 
     <TextView

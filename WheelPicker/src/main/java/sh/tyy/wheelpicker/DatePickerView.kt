@@ -1,10 +1,11 @@
 package sh.tyy.wheelpicker
 
 import android.content.Context
-import android.text.SpannableString
 import android.util.AttributeSet
-import android.util.Log
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -17,8 +18,7 @@ import java.util.*
 
 class YearWheelAdapter(
     valueEnabledProvider: WeakReference<ValueEnabledProvider>
-) :
-    ItemEnableWheelAdapter(valueEnabledProvider) {
+) : ItemEnableWheelAdapter(valueEnabledProvider) {
     override fun getItemCount(): Int {
         return Int.MAX_VALUE
     }
@@ -27,19 +27,16 @@ class YearWheelAdapter(
         get() = Int.MAX_VALUE
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextWheelViewHolder {
-        val view =
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.wheel_picker_item, parent, false) as TextView
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.wheel_picker_item, parent, false) as TextView
         return TextWheelViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: TextWheelViewHolder, position: Int) {
-        val text = SpannableString("$position")
         val isEnabled = valueEnabledProvider.get()?.isEnabled(this, position) ?: true
         holder.onBindData(
             TextWheelPickerView.Item(
                 id = "$position",
-                text = text,
+                text = holder.itemView.context.getString(R.string.day_time_picker_format_year, position),
                 isEnabled = isEnabled
             )
         )
@@ -50,12 +47,12 @@ class DatePickerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : TripleDependentPickerView(context, attrs, defStyleAttr),
-    BaseWheelPickerView.WheelPickerViewListener {
+) : TripleDependentPickerView(context, attrs, defStyleAttr), BaseWheelPickerView.WheelPickerViewListener {
 
     enum class Mode {
         YEAR_MONTH_DAY,
-        YEAR_MONTH
+        YEAR_MONTH,
+        YEAR,
     }
 
     var mode: Mode = Mode.YEAR_MONTH_DAY
@@ -65,9 +62,19 @@ class DatePickerView @JvmOverloads constructor(
             }
             field = value
             when (value) {
-                Mode.YEAR_MONTH_DAY -> dayPickerView.visibility = View.VISIBLE
+                Mode.YEAR_MONTH_DAY -> {
+                    dayPickerView.visibility = View.VISIBLE
+                    monthPickerView.visibility = View.VISIBLE
+                }
                 Mode.YEAR_MONTH -> {
+                    monthPickerView.visibility = View.VISIBLE
                     dayPickerView.visibility = View.GONE
+                    setThird(1, false, null)
+                }
+                Mode.YEAR -> {
+                    dayPickerView.visibility = View.GONE
+                    monthPickerView.visibility = View.GONE
+                    setSecond(0, false, null)
                     setThird(1, false, null)
                 }
             }
@@ -131,8 +138,7 @@ class DatePickerView @JvmOverloads constructor(
 
     var minDate: Date? = null
         set(value) {
-            val newValue =
-                if (value != null && maxDate != null) minOf(maxDate ?: value, value) else value
+            val newValue = if (value != null && maxDate != null) minOf(maxDate ?: value, value) else value
             val oldData = minData()
             if (field == newValue) {
                 return
@@ -150,8 +156,7 @@ class DatePickerView @JvmOverloads constructor(
 
     var maxDate: Date? = null
         set(value) {
-            val newValue =
-                if (value != null && minDate != null) maxOf(minDate ?: value, value) else value
+            val newValue = if (value != null && minDate != null) maxOf(minDate ?: value, value) else value
             val oldData = maxData()
             if (field == newValue) {
                 return
@@ -243,13 +248,12 @@ class DatePickerView @JvmOverloads constructor(
         }
         yearPickerView = binding.leftPicker
         yearPickerView.setAdapter(yearAdapter)
-        addView(highlightView)
-        (highlightView.layoutParams as? LayoutParams)?.apply {
-            width = ViewGroup.LayoutParams.MATCH_PARENT
-            height =
-                context.resources.getDimensionPixelSize(R.dimen.text_wheel_picker_item_height)
-            gravity = Gravity.CENTER_VERTICAL
-        }
+        addView(highlightView,
+            0,
+            LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, context.resources.getDimensionPixelSize(R.dimen.text_wheel_picker_item_height)).apply {
+                gravity = Gravity.CENTER_VERTICAL
+            }
+        )
 
         dayPickerView.setWheelListener(this)
         monthPickerView.setWheelListener(this)

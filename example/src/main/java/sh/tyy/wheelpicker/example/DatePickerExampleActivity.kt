@@ -124,9 +124,11 @@ class DatePickerExampleActivity : AppCompatActivity(), PickerExample {
     private fun setupRadioGroup() {
         val yearMonthDayButton: RadioButton = findViewById(R.id.year_month_day_button)
         val yearMonthButton: RadioButton = findViewById(R.id.year_month_button)
+        val yearButton: RadioButton = findViewById(R.id.year_button)
         when (datePickerView.mode) {
             DatePickerView.Mode.YEAR_MONTH_DAY -> yearMonthDayButton.isChecked = true
             DatePickerView.Mode.YEAR_MONTH -> yearMonthButton.isChecked = true
+            DatePickerView.Mode.YEAR -> yearButton.isChecked = true
         }
         yearMonthDayButton.setOnClickListener {
             datePickerView.mode = DatePickerView.Mode.YEAR_MONTH_DAY
@@ -137,6 +139,12 @@ class DatePickerExampleActivity : AppCompatActivity(), PickerExample {
         yearMonthButton.setOnClickListener {
             datePickerView.mode = DatePickerView.Mode.YEAR_MONTH
             formatter = SimpleDateFormat("yyyy-MM")
+            updateSelectedText(datePickerView.year, datePickerView.month, datePickerView.day)
+            updateLimitTextFieldsText()
+        }
+        yearButton.setOnClickListener {
+            datePickerView.mode = DatePickerView.Mode.YEAR
+            formatter = SimpleDateFormat("yyyy")
             updateSelectedText(datePickerView.year, datePickerView.month, datePickerView.day)
             updateLimitTextFieldsText()
         }
